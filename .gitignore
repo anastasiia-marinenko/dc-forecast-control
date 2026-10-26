@@ -1,5 +1,8 @@
 __pycache__/
 *.pyc
-data/
-results/
 .ipynb_checkpoints/
+data/
+# keep only the final report and figures, the rest is big
+results/*
+!results/report/
+!results/figures/
