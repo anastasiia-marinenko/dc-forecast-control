@@ -3,12 +3,12 @@
 Code for the paper "Intelligent predictive control system for task placement and cooling in a data center"
 (A. Marinenko, S. Vovk, Oles Honchar Dnipro National University, MPZIS-2026).
 
-A data center hall can save energy if only the needed servers are on and the hall isn't overcooled.
-But servers need time to start and cooling can't change its power instantly, so these decisions are
+A data center hall can save energy if only the needed servers are on and the hall is not overcooled.
+But servers need time to start and cooling cannot change its power instantly, so these decisions are
 made in advance from a load forecast. Here a GRU forecasts the load 5-15 min ahead, and a simple
 decision module sets the number of servers, puts tasks into the better-cooled zone first and prepares
 cooling. The GRU is trained either with MSE or with an asymmetric loss that punishes underestimation
-λ times more. Models are compared by the energy and reliability of the hall, not by forecast error.
+λ times more. Models are compared by the energy and reliability of the hall rather than forecast error.
 
 ## How to run
 
@@ -30,8 +30,8 @@ python scripts/04_report.py --runs results/H5 results/H10 results/H15 --out resu
 python scripts/05_figures.py --runs results/H5 results/H10 results/H15 --report results/report --out results/figures
 ```
 
-Step 2 is much faster on a GPU. The whole thing is also in `notebooks/dc_forecast_control_kaggle.ipynb`,
-which I ran on Kaggle (GPU T4, about 30 min, plus ~25 min if it builds the series from the raw trace). To just check that the code works, use
+Step 2 executes significantly faster on a GPU. The entire workflow is also available in `notebooks/dc_forecast_control_kaggle.ipynb`.
+This notebook was executed on Kaggle using a T4 GPU, requiring approximately 30 minutes, or an additional 25 minutes if building the series from the raw trace. For a quick functionality check, use:
 `01_build_series.py --synthetic` and `02_train_forecasts.py --max-series 20 --epochs 2`.
 
 ## Results
