@@ -1,0 +1,171 @@
+===== H = 5 min, 10 runs per GRU variant =====
+RQ1 (V <= 1%, Theta <= 0.1%, m and s tuned on test):
+  vs all servers on: saves 29.2-31.8 %
+  persistence  -2.81 % vs GRU-MSE (CI -2.92..-2.71), 0/199 halls better, p = 2e-34
+  ridge        +0.81 % vs GRU-MSE (CI +0.72..+0.90), 180/199 halls better, p = 9e-30
+  gru_mse      (baseline)
+  gru_l1       +0.18 % vs GRU-MSE (CI +0.14..+0.22), 149/199 halls better, p = 2e-15, 7/10 runs better
+  gru_l2       +0.16 % vs GRU-MSE (CI +0.13..+0.20), 152/199 halls better, p = 9e-17, 7/10 runs better
+  gru_l4       +0.63 % vs GRU-MSE (CI +0.57..+0.68), 183/199 halls better, p = 7e-32, 7/10 runs better
+  gru_l8       +0.98 % vs GRU-MSE (CI +0.90..+1.05), 190/199 halls better, p = 1e-33, 10/10 runs better
+  ideal        +16.63 % vs GRU-MSE (CI +16.49..+16.76), 199/199 halls better, p = 2e-34
+  GRU-MSE runs differ in energy by 1.22 %
+  gru_l1       vs ridge: -0.64 %, 36/199 halls better, p = 1e-23
+  gru_l2       vs ridge: -0.65 %, 28/199 halls better, p = 3e-25
+  gru_l4       vs ridge: -0.19 %, 74/199 halls better, p = 0.0002
+  gru_l8       vs ridge: +0.17 %, 117/199 halls better, p = 0.002
+  extra energy vs ideal forecast, %:
+    V <= 0.10%: persistence 45.02, ridge 32.76, gru_mse 35.17, gru_l1 34.80, gru_l2 35.02, gru_l4 32.99, gru_l8 33.91
+    V <= 0.25%: persistence 36.01, ridge 26.99, gru_mse 28.61, gru_l1 27.77, gru_l2 28.71, gru_l4 28.08, gru_l8 29.56
+    V <= 0.50%: persistence 29.42, ridge 23.36, gru_mse 24.30, gru_l1 23.95, gru_l2 24.53, gru_l4 24.32, gru_l8 24.50
+    V <= 1.00%: persistence 23.33, ridge 18.99, gru_mse 19.96, gru_l1 19.74, gru_l2 19.76, gru_l4 19.20, gru_l8 18.78
+    V <= 2.00%: persistence 18.30, ridge 14.71, gru_mse 15.36, gru_l1 15.19, gru_l2 15.23, gru_l4 14.69, gru_l8 14.45
+    V <= 5.00%: persistence 12.02, ridge 9.79, gru_mse 9.67, gru_l1 9.60, gru_l2 9.61, gru_l4 9.52, gru_l8 9.76
+  errors and servers on test (mean over runs):
+               mae   bias  under_share  idle_calm  shortage_in_rises  m_at_1pct
+family                                                                         
+gru_l1       0.812 -0.135        0.496      3.798              0.270      0.427
+gru_l2       0.907  0.331        0.319      3.799              0.273      0.348
+gru_l4       1.157  0.835        0.186      3.687              0.274      0.258
+gru_l8       1.484  1.296        0.112      3.590              0.270      0.185
+gru_mse      0.825  0.009        0.437      3.830              0.271      0.405
+ideal        0.000  0.000        0.000      0.500              0.000      0.000
+persistence  0.920 -0.003        0.476      4.323              0.278      0.473
+ridge        0.831  0.041        0.425      3.704              0.265      0.384
+  Spearman(MAE, energy): -0.48 for 52 models (p = 0.00034), -0.36 for 7 variants (p = 0.43)
+  by MAE   : ['gru_l1', 'gru_mse', 'ridge', 'gru_l2', 'persistence', 'gru_l4', 'gru_l8']
+  by energy: ['gru_l8', 'ridge', 'gru_l4', 'gru_l1', 'gru_l2', 'gru_mse', 'persistence']
+RQ2 (m, s tuned on validation for V <= 1%, then used on test):
+  persistence  V 0.90 % -> 1.23 %, Theta 0.272 %, both limits ok in 9 % halls, energy vs GRU-MSE -3.10 %
+  ridge        V 0.88 % -> 1.21 %, Theta 0.045 %, both limits ok in 12 % halls, energy vs GRU-MSE +0.30 %
+  gru_mse      V 0.89 % -> 1.30 %, Theta 0.265 %, both limits ok in 4 % halls
+  gru_l1       V 0.88 % -> 1.30 %, Theta 0.332 %, both limits ok in 4 % halls, energy vs GRU-MSE +0.11 %
+  gru_l2       V 0.87 % -> 1.34 %, Theta 0.106 %, both limits ok in 6 % halls, energy vs GRU-MSE +0.19 %
+  gru_l4       V 0.86 % -> 1.31 %, Theta 0.048 %, both limits ok in 8 % halls, energy vs GRU-MSE +0.53 %
+  gru_l8       V 0.87 % -> 1.28 %, Theta 0.010 %, both limits ok in 8 % halls, energy vs GRU-MSE +0.77 %
+  ideal        V 0.00 % -> 0.00 %, Theta 0.057 %, both limits ok in 83 % halls, energy vs GRU-MSE +14.87 %
+  gru_mse      overheating by run, %: 0.061, 0.043, 0.468, 0.520, 0.591, 0.508, 0.221, 0.101, 0.052, 0.088; 4/10 runs ok
+  gru_l1       overheating by run, %: 0.565, 0.120, 0.581, 0.591, 0.086, 0.578, 0.520, 0.120, 0.061, 0.101; 2/10 runs ok
+  gru_l2       overheating by run, %: 0.038, 0.029, 0.194, 0.072, 0.042, 0.422, 0.042, 0.121, 0.042, 0.060; 7/10 runs ok
+  gru_l4       overheating by run, %: 0.056, 0.038, 0.035, 0.051, 0.062, 0.064, 0.049, 0.048, 0.034, 0.040; 10/10 runs ok
+  gru_l8       overheating by run, %: 0.006, 0.007, 0.011, 0.009, 0.019, 0.011, 0.013, 0.009, 0.007, 0.004; 10/10 runs ok
+  safety factor (stricter V when tuning, checked against V <= 1%, Theta <= 0.1%):
+    factor 10 (target 0.10%): persistence 51 % halls / E -5.59, ridge 49 % halls / E +0.52, gru_mse 57 % halls / E +0.00, gru_l1 51 % halls / E +0.16, gru_l2 63 % halls / E +0.11, gru_l4 69 % halls / E +0.88, gru_l8 71 % halls / E +1.05
+    factor 4 (target 0.25%): persistence 47 % halls / E -4.48, ridge 53 % halls / E +0.62, gru_mse 53 % halls / E +0.00, gru_l1 48 % halls / E +0.09, gru_l2 63 % halls / E +0.17, gru_l4 72 % halls / E +0.81, gru_l8 82 % halls / E +0.88
+    factor 2 (target 0.50%): persistence 42 % halls / E -3.84, ridge 65 % halls / E +0.45, gru_mse 39 % halls / E +0.00, gru_l1 35 % halls / E +0.11, gru_l2 48 % halls / E +0.19, gru_l4 59 % halls / E +0.66, gru_l8 73 % halls / E +0.76
+    factor 1 (target 1.00%): persistence 9 % halls / E -3.10, ridge 12 % halls / E +0.31, gru_mse 4 % halls / E +0.00, gru_l1 4 % halls / E +0.12, gru_l2 6 % halls / E +0.19, gru_l4 8 % halls / E +0.53, gru_l8 8 % halls / E +0.78
+
+===== H = 10 min, 10 runs per GRU variant =====
+RQ1 (V <= 1%, Theta <= 0.1%, m and s tuned on test):
+  vs all servers on: saves 27.8-31.1 %
+  persistence  -4.29 % vs GRU-MSE (CI -4.43..-4.14), 0/199 halls better, p = 2e-34
+  ridge        -0.93 % vs GRU-MSE (CI -1.02..-0.84), 19/199 halls better, p = 3e-31
+  gru_mse      (baseline)
+  gru_l1       -0.27 % vs GRU-MSE (CI -0.32..-0.22), 48/199 halls better, p = 2e-19, 1/10 runs better
+  gru_l2       +0.23 % vs GRU-MSE (CI +0.17..+0.28), 139/199 halls better, p = 1e-11, 8/10 runs better
+  gru_l4       +0.46 % vs GRU-MSE (CI +0.39..+0.52), 158/199 halls better, p = 3e-23, 8/10 runs better
+  gru_l8       -0.09 % vs GRU-MSE (CI -0.17..-0.00), 91/199 halls better, p = 0.02, 5/10 runs better
+  ideal        +16.81 % vs GRU-MSE (CI +16.68..+16.94), 199/199 halls better, p = 2e-34
+  GRU-MSE runs differ in energy by 1.64 %
+  gru_l1       vs ridge: +0.64 %, 161/199 halls better, p = 6e-22
+  gru_l2       vs ridge: +1.14 %, 187/199 halls better, p = 7e-33
+  gru_l4       vs ridge: +1.37 %, 190/199 halls better, p = 9e-34
+  gru_l8       vs ridge: +0.83 %, 166/199 halls better, p = 2e-25
+  extra energy vs ideal forecast, %:
+    V <= 0.10%: persistence 46.16, ridge 34.09, gru_mse 29.14, gru_l1 29.66, gru_l2 30.06, gru_l4 30.13, gru_l8 32.14
+    V <= 0.25%: persistence 34.66, ridge 28.15, gru_mse 26.08, gru_l1 27.03, gru_l2 26.65, gru_l4 27.17, gru_l8 28.90
+    V <= 0.50%: persistence 30.66, ridge 24.88, gru_mse 23.93, gru_l1 24.62, gru_l2 24.54, gru_l4 24.58, gru_l8 25.66
+    V <= 1.00%: persistence 25.37, ridge 21.33, gru_mse 20.22, gru_l1 20.55, gru_l2 19.94, gru_l4 19.67, gru_l8 20.33
+    V <= 2.00%: persistence 20.14, ridge 17.31, gru_mse 15.68, gru_l1 16.07, gru_l2 15.31, gru_l4 14.98, gru_l8 15.14
+    V <= 5.00%: persistence 13.49, ridge 10.50, gru_mse 9.71, gru_l1 9.95, gru_l2 9.63, gru_l4 9.66, gru_l8 9.95
+  errors and servers on test (mean over runs):
+               mae   bias  under_share  idle_calm  shortage_in_rises  m_at_1pct
+family                                                                         
+gru_l1       0.875 -0.078        0.472      4.007              0.284      0.443
+gru_l2       0.988  0.425        0.298      3.900              0.294      0.345
+gru_l4       1.223  0.879        0.191      3.825              0.293      0.268
+gru_l8       1.570  1.367        0.117      3.875              0.296      0.208
+gru_mse      0.880  0.043        0.426      3.949              0.287      0.415
+ideal        0.000  0.000        0.000      0.500              0.000      0.000
+persistence  1.025 -0.006        0.479      4.531              0.294      0.503
+ridge        0.922  0.059        0.424      4.106              0.264      0.431
+  Spearman(MAE, energy): -0.19 for 52 models (p = 0.17), -0.21 for 7 variants (p = 0.64)
+  by MAE   : ['gru_l1', 'gru_mse', 'ridge', 'gru_l2', 'persistence', 'gru_l4', 'gru_l8']
+  by energy: ['gru_l4', 'gru_l2', 'gru_mse', 'gru_l8', 'gru_l1', 'ridge', 'persistence']
+RQ2 (m, s tuned on validation for V <= 1%, then used on test):
+  persistence  V 0.88 % -> 1.02 %, Theta 0.297 %, both limits ok in 8 % halls, energy vs GRU-MSE -4.61 %
+  ridge        V 0.86 % -> 1.24 %, Theta 0.121 %, both limits ok in 15 % halls, energy vs GRU-MSE -0.98 %
+  gru_mse      V 0.86 % -> 1.21 %, Theta 0.086 %, both limits ok in 17 % halls
+  gru_l1       V 0.85 % -> 1.24 %, Theta 0.120 %, both limits ok in 12 % halls, energy vs GRU-MSE -0.08 %
+  gru_l2       V 0.86 % -> 1.08 %, Theta 0.067 %, both limits ok in 34 % halls, energy vs GRU-MSE -0.30 %
+  gru_l4       V 0.86 % -> 1.06 %, Theta 0.012 %, both limits ok in 39 % halls, energy vs GRU-MSE -0.17 %
+  gru_l8       V 0.86 % -> 1.15 %, Theta 0.022 %, both limits ok in 22 % halls, energy vs GRU-MSE -0.07 %
+  ideal        V 0.00 % -> 0.00 %, Theta 0.063 %, both limits ok in 93 % halls, energy vs GRU-MSE +15.63 %
+  gru_mse      overheating by run, %: 0.095, 0.094, 0.090, 0.070, 0.090, 0.086, 0.088, 0.098, 0.077, 0.076; 10/10 runs ok
+  gru_l1       overheating by run, %: 0.126, 0.083, 0.117, 0.135, 0.107, 0.141, 0.118, 0.160, 0.095, 0.122; 2/10 runs ok
+  gru_l2       overheating by run, %: 0.090, 0.068, 0.106, 0.049, 0.036, 0.117, 0.022, 0.091, 0.030, 0.066; 8/10 runs ok
+  gru_l4       overheating by run, %: 0.012, 0.011, 0.008, 0.010, 0.016, 0.007, 0.007, 0.045, 0.004, 0.003; 10/10 runs ok
+  gru_l8       overheating by run, %: 0.001, 0.009, 0.076, 0.005, 0.004, 0.003, 0.006, 0.048, 0.032, 0.036; 10/10 runs ok
+  safety factor (stricter V when tuning, checked against V <= 1%, Theta <= 0.1%):
+    factor 10 (target 0.10%): persistence 46 % halls / E -7.09, ridge 47 % halls / E -1.42, gru_mse 79 % halls / E +0.00, gru_l1 67 % halls / E -0.23, gru_l2 74 % halls / E +0.06, gru_l4 89 % halls / E +0.12, gru_l8 65 % halls / E -0.44
+    factor 4 (target 0.25%): persistence 33 % halls / E -6.14, ridge 66 % halls / E -1.22, gru_mse 83 % halls / E +0.00, gru_l1 72 % halls / E +0.06, gru_l2 81 % halls / E -0.42, gru_l4 91 % halls / E -0.48, gru_l8 74 % halls / E -0.81
+    factor 2 (target 0.50%): persistence 21 % halls / E -5.26, ridge 65 % halls / E -1.00, gru_mse 72 % halls / E +0.00, gru_l1 59 % halls / E +0.06, gru_l2 83 % halls / E -0.50, gru_l4 92 % halls / E -0.52, gru_l8 75 % halls / E -0.66
+    factor 1 (target 1.00%): persistence 8 % halls / E -4.61, ridge 15 % halls / E -0.98, gru_mse 17 % halls / E +0.00, gru_l1 12 % halls / E -0.08, gru_l2 34 % halls / E -0.29, gru_l4 39 % halls / E -0.16, gru_l8 22 % halls / E -0.06
+
+===== H = 15 min, 10 runs per GRU variant =====
+RQ1 (V <= 1%, Theta <= 0.1%, m and s tuned on test):
+  vs all servers on: saves 26.8-30.5 %
+  persistence  -5.34 % vs GRU-MSE (CI -5.50..-5.19), 0/199 halls better, p = 2e-34
+  ridge        -0.90 % vs GRU-MSE (CI -1.02..-0.79), 31/199 halls better, p = 2e-26
+  gru_mse      (baseline)
+  gru_l1       +0.04 % vs GRU-MSE (CI -0.01..+0.10), 100/199 halls better, p = 0.3, 5/10 runs better
+  gru_l2       -0.52 % vs GRU-MSE (CI -0.58..-0.47), 21/199 halls better, p = 2e-29, 1/10 runs better
+  gru_l4       -1.78 % vs GRU-MSE (CI -1.87..-1.70), 1/199 halls better, p = 2e-34, 0/10 runs better
+  gru_l8       -1.80 % vs GRU-MSE (CI -1.90..-1.70), 2/199 halls better, p = 2e-34, 0/10 runs better
+  ideal        +17.13 % vs GRU-MSE (CI +16.99..+17.27), 199/199 halls better, p = 2e-34
+  GRU-MSE runs differ in energy by 0.93 %
+  gru_l1       vs ridge: +0.93 %, 175/199 halls better, p = 6e-29
+  gru_l2       vs ridge: +0.37 %, 125/199 halls better, p = 3e-08
+  gru_l4       vs ridge: -0.88 %, 31/199 halls better, p = 2e-25
+  gru_l8       vs ridge: -0.90 %, 29/199 halls better, p = 1e-24
+  extra energy vs ideal forecast, %:
+    V <= 0.10%: persistence 45.58, ridge 34.94, gru_mse 34.37, gru_l1 34.46, gru_l2 35.99, gru_l4 39.25, gru_l8 38.75
+    V <= 0.25%: persistence 35.55, ridge 32.11, gru_mse 31.17, gru_l1 31.22, gru_l2 32.59, gru_l4 34.40, gru_l8 33.83
+    V <= 0.50%: persistence 32.03, ridge 27.43, gru_mse 27.06, gru_l1 25.98, gru_l2 27.37, gru_l4 29.23, gru_l8 28.94
+    V <= 1.00%: persistence 27.13, ridge 21.77, gru_mse 20.69, gru_l1 20.64, gru_l2 21.32, gru_l4 22.84, gru_l8 22.86
+    V <= 2.00%: persistence 21.78, ridge 16.74, gru_mse 15.72, gru_l1 15.91, gru_l2 16.17, gru_l4 17.12, gru_l8 17.15
+    V <= 5.00%: persistence 14.15, ridge 10.85, gru_mse 10.20, gru_l1 10.17, gru_l2 10.41, gru_l4 11.20, gru_l8 11.33
+  errors and servers on test (mean over runs):
+               mae   bias  under_share  idle_calm  shortage_in_rises  m_at_1pct
+family                                                                         
+gru_l1       0.910 -0.148        0.510      4.010              0.306      0.457
+gru_l2       1.015  0.353        0.334      4.098              0.310      0.379
+gru_l4       1.337  0.946        0.201      4.279              0.309      0.308
+gru_l8       1.700  1.467        0.124      4.245              0.308      0.233
+gru_mse      0.929  0.026        0.450      4.017              0.307      0.425
+ideal        0.000  0.000        0.000      0.500              0.000      0.000
+persistence  1.095 -0.007        0.479      4.914              0.290      0.553
+ridge        0.951  0.040        0.438      4.166              0.301      0.443
+  Spearman(MAE, energy): 0.83 for 52 models (p = 1.9e-14), 0.86 for 7 variants (p = 0.014)
+  by MAE   : ['gru_l1', 'gru_mse', 'ridge', 'gru_l2', 'persistence', 'gru_l4', 'gru_l8']
+  by energy: ['gru_l1', 'gru_mse', 'gru_l2', 'ridge', 'gru_l4', 'gru_l8', 'persistence']
+RQ2 (m, s tuned on validation for V <= 1%, then used on test):
+  persistence  V 0.86 % -> 1.28 %, Theta 0.069 %, both limits ok in 21 % halls, energy vs GRU-MSE -5.42 %
+  ridge        V 0.86 % -> 1.16 %, Theta 0.403 %, both limits ok in 10 % halls, energy vs GRU-MSE -1.28 %
+  gru_mse      V 0.84 % -> 1.23 %, Theta 0.131 %, both limits ok in 9 % halls
+  gru_l1       V 0.85 % -> 1.13 %, Theta 0.230 %, both limits ok in 15 % halls, energy vs GRU-MSE -0.52 %
+  gru_l2       V 0.84 % -> 1.22 %, Theta 0.173 %, both limits ok in 10 % halls, energy vs GRU-MSE -0.51 %
+  gru_l4       V 0.82 % -> 1.38 %, Theta 0.151 %, both limits ok in 3 % halls, energy vs GRU-MSE -0.65 %
+  gru_l8       V 0.82 % -> 1.25 %, Theta 0.096 %, both limits ok in 7 % halls, energy vs GRU-MSE -1.37 %
+  ideal        V 0.00 % -> 0.00 %, Theta 0.022 %, both limits ok in 95 % halls, energy vs GRU-MSE +15.59 %
+  gru_mse      overheating by run, %: 0.197, 0.083, 0.197, 0.172, 0.146, 0.092, 0.121, 0.136, 0.122, 0.047; 3/10 runs ok
+  gru_l1       overheating by run, %: 0.121, 0.224, 0.252, 0.315, 0.339, 0.195, 0.232, 0.201, 0.210, 0.208; 0/10 runs ok
+  gru_l2       overheating by run, %: 0.123, 0.345, 0.059, 0.162, 0.167, 0.169, 0.362, 0.116, 0.131, 0.094; 2/10 runs ok
+  gru_l4       overheating by run, %: 0.003, 0.278, 0.126, 0.010, 0.334, 0.146, 0.271, 0.153, 0.091, 0.099; 4/10 runs ok
+  gru_l8       overheating by run, %: 0.129, 0.081, 0.066, 0.157, 0.176, 0.042, 0.132, 0.063, 0.087, 0.030; 6/10 runs ok
+  safety factor (stricter V when tuning, checked against V <= 1%, Theta <= 0.1%):
+    factor 10 (target 0.10%): persistence 52 % halls / E -11.13, ridge 85 % halls / E -3.34, gru_mse 63 % halls / E +0.00, gru_l1 60 % halls / E -1.20, gru_l2 62 % halls / E -1.27, gru_l4 52 % halls / E -0.46, gru_l8 34 % halls / E +0.50
+    factor 4 (target 0.25%): persistence 86 % halls / E -9.17, ridge 58 % halls / E -1.84, gru_mse 53 % halls / E +0.00, gru_l1 58 % halls / E -0.85, gru_l2 51 % halls / E -0.71, gru_l4 40 % halls / E -0.43, gru_l8 41 % halls / E -0.59
+    factor 2 (target 0.50%): persistence 82 % halls / E -6.67, ridge 46 % halls / E -1.82, gru_mse 42 % halls / E +0.00, gru_l1 50 % halls / E -0.73, gru_l2 42 % halls / E -0.55, gru_l4 24 % halls / E -0.57, gru_l8 36 % halls / E -1.22
+    factor 1 (target 1.00%): persistence 21 % halls / E -5.42, ridge 10 % halls / E -1.28, gru_mse 9 % halls / E +0.00, gru_l1 15 % halls / E -0.52, gru_l2 10 % halls / E -0.51, gru_l4 3 % halls / E -0.65, gru_l8 7 % halls / E -1.37
+
