@@ -31,8 +31,19 @@ python scripts/05_figures.py --runs results/H5 results/H10 results/H15 --report 
 ```
 
 Step 2 is much faster on a GPU. The whole thing is also in `notebooks/dc_forecast_control_kaggle.ipynb`,
-which I ran on Kaggle (GPU T4, about 1.5 h). To just check that the code works, use
+which I ran on Kaggle (GPU T4, about 30 min, plus ~25 min if it builds the series from the raw trace). To just check that the code works, use
 `01_build_series.py --synthetic` and `02_train_forecasts.py --max-series 20 --epochs 2`.
+
+## Results
+
+The notebook in `notebooks/` is saved with its outputs.
+The final numbers are in `results/report/numbers.txt` (also `summary.json`) and the figures in `results/figures/`.
+
+Main result (5 min ahead, shortage ≤ 1 %, overheating ≤ 0.1 %): the GRU trained with λ = 8 uses 0.98 %
+less energy than the same GRU trained with MSE (better in 190 of 199 halls and in all 10 training runs).
+When the reserves are tuned on validation and used on new data, it overheats the hall 26 times less often.
+
+![Energy saving vs GRU trained with MSE](results/figures/fig_energy_en.png)
 
 ## Files
 
